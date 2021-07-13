@@ -1,32 +1,28 @@
-// import "./App.css";
 import React, { Component } from "react";
-// import toast, { Toaster } from "react-hot-toast";
-import Container from "./component/Container/Container.jsx";
-import "./App.module.css";
-import api from "./services/api";
-import Searchbar from "./component/Searchbar/Searchbar";
-import ImageGallery from "./component/ImageGallery/ImageGallery";
-import ImageLoader from "./component/Loader/Loader";
-import Button from "./component/Button/Button";
-import Modal from "./component/Modal/Modal";
-// import onError from './component/Error';
-// import image from './component/images/pendingImage.png';
-// import { loader } from "mini-css-extract-plugin";
+import api from "../services/api";
+import Button from "./Button/Button.jsx";
+import Container from "./Container/Container.jsx";
+import ImageGallery from "./ImageGallery/ImageGallery.jsx";
+import Modal from "./Modal/Modal.jsx";
+import ImageLoader from "./Loader/Loader.jsx";
+import Searchbar from "./Searchbar/Searchbar.jsx";
 
 class App extends Component {
   state = {
-    images: [],
     page: 1,
     query: "",
+    images: [],
     isLoading: false,
     showModal: false,
     url: "",
     tag: "",
   };
+
   componentDidUpdate(prevProps, prevState) {
     const { query } = this.state;
     if (query !== prevState.query) {
       this.fetchImages()
+
         .catch((error) => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
     }
@@ -52,7 +48,15 @@ class App extends Component {
         })
       )
       .catch((error) => alert(error))
-      .finally(() => this.setState({ loader: false }));
+      .finally(() => this.setState({ isLoading: false }));
+  };
+
+  handleFormData = ({ query }) => {
+    this.setState({
+      page: 1,
+      query,
+      images: [],
+    });
   };
 
   handleImageClick = ({ target }) => {
@@ -69,10 +73,6 @@ class App extends Component {
     this.toggleModal();
   };
 
-  handleFormData = ({ query }) => {
-    this.setState({ query, page: 1, images: [] });
-  };
-
   toggleModal = () =>
     this.setState((prevState) => ({ showModal: !prevState.showModal }));
 
@@ -80,6 +80,7 @@ class App extends Component {
 
   render() {
     const { images, isLoading, showModal, url, tag } = this.state;
+
     const showMoreBtn = isLoading && !showModal;
     return (
       <Container>
@@ -90,6 +91,7 @@ class App extends Component {
           </Modal>
         )}
         <Searchbar onSubmit={this.handleFormData} />
+
         <ImageGallery images={images} onClick={this.handleImageClick} />
         {showMoreBtn && images.length !== 0 && <ImageLoader />}
         {!isLoading && images[0] && (
@@ -99,4 +101,5 @@ class App extends Component {
     );
   }
 }
+
 export default App;
