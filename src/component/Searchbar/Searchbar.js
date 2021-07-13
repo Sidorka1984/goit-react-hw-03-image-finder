@@ -33,7 +33,6 @@ class Searchbar extends Component {
             className={styles.input}
             type="text"
             autoComplete="off"
-            // eslint-disable-next-line
             autoFocus
             placeholder="𝚂𝚎𝚊𝚛𝚌𝚑 𝚒𝚖𝚊𝚐𝚎𝚜 "
             onChange={this.handleInputChange}

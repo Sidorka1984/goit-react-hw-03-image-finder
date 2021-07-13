@@ -46,9 +46,7 @@ class App extends Component {
   handleOnButtonClick = () => {
     this.fetchImages()
       .then(() =>
-        // eslint-disable-next-line
         window.scrollTo({
-          // eslint-disable-next-line
           top: document.documentElement.scrollHeight,
           behavior: "smooth",
         })
