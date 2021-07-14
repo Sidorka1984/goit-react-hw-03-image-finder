@@ -7,7 +7,6 @@ import ImageGallery from "./ImageGallery/ImageGallery.jsx";
 import Modal from "./Modal/Modal.jsx";
 import ImageLoader from "./Loader/Loader.jsx";
 import Searchbar from "./Searchbar/Searchbar.jsx";
-// import onError from './Error';
 
 class App extends Component {
   state = {
@@ -24,10 +23,9 @@ class App extends Component {
     const { query } = this.state;
     if (query !== prevState.query) {
       this.fetchImages()
-
         .catch((error) => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
-      toast.error("Please enter a valid request");
+      // toast.error("Please enter a valid request")
     }
   }
 
@@ -35,13 +33,13 @@ class App extends Component {
     const { query, page } = this.state;
     this.setState({ isLoading: true });
     return api.findImage(query, page).then((images) => {
-      if (images.length > 10) {
-        return toast("Too many matches found.", { icon: "⚠️" });
-      }
       this.setState((prevState) => ({
         images: [...prevState.images, ...images],
         page: prevState.page + 1,
       }));
+      if (images.length === 0) {
+        toast.error("Please enter a valid request or that's all");
+      }
     });
   };
 
