@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import api from "../services/api";
 import Button from "./Button/Button.jsx";
 import Container from "./Container/Container.jsx";
@@ -6,6 +7,7 @@ import ImageGallery from "./ImageGallery/ImageGallery.jsx";
 import Modal from "./Modal/Modal.jsx";
 import ImageLoader from "./Loader/Loader.jsx";
 import Searchbar from "./Searchbar/Searchbar.jsx";
+// import onError from './Error';
 
 class App extends Component {
   state = {
@@ -25,6 +27,7 @@ class App extends Component {
 
         .catch((error) => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
+      toast.error("Please enter a valid request");
     }
   }
 
@@ -32,6 +35,9 @@ class App extends Component {
     const { query, page } = this.state;
     this.setState({ isLoading: true });
     return api.findImage(query, page).then((images) => {
+      if (images.length > 10) {
+        return toast("Too many matches found.", { icon: "⚠️" });
+      }
       this.setState((prevState) => ({
         images: [...prevState.images, ...images],
         page: prevState.page + 1,
@@ -84,6 +90,7 @@ class App extends Component {
     const showMoreBtn = isLoading && !showModal;
     return (
       <Container>
+        <Toaster autoClose={4000} position="top-right" />
         {showModal && (
           <Modal onClose={this.toggleModal} onClick={this.handleImageClick}>
             {isLoading && <ImageLoader />}
