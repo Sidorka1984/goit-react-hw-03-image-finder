@@ -5,7 +5,7 @@ const Container = ({ children }) => (
     <div className={styles.Container}>{children}</div>
 );
 Container.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
 }
 
 export default Container;
